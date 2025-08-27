@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-=======
 
->>>>>>> 90c4200 (private chatrooms done)
 ## Setup
 
 #### - Create Virtual Environment
