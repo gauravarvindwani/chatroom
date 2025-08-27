@@ -16,9 +16,15 @@ class ChatroomConsumer(WebsocketConsumer):
         )
         
         # add and update online users
-        if self.user in self.chatroom.users_online.all():
-            self.chatroom.users_online.add(self.user)
-            self.update_online_count()
+        # if self.user in self.chatroom.users_online.all():
+        #     self.chatroom.users_online.add(self.user)
+        #     self.update_online_count()
+            
+        if self.user.is_authenticated:
+            if self.user not in self.chatroom.users_online.all():
+                self.chatroom.users_online.add(self.user)
+                self.update_online_count()
+
         
         self.accept()
         
@@ -28,9 +34,14 @@ class ChatroomConsumer(WebsocketConsumer):
         )
         
         # remove and update online users
-        if self.user not in self.chatroom.users_online.all():
-            self.chatroom.users_online.remove(self.user)
-            self.update_online_count()
+        # if self.user not in self.chatroom.users_online.all():
+        #     self.chatroom.users_online.remove(self.user)
+        #     self.update_online_count()
+            
+        if self.user.is_authenticated:
+            if self.user in self.chatroom.users_online.all():
+                self.chatroom.users_online.remove(self.user)
+                self.update_online_count()
         
     
     def receive(self, text_data):
@@ -86,5 +97,5 @@ class ChatroomConsumer(WebsocketConsumer):
         context = {
             'online_count' : online_count,
         }
-        html = render_to_string("a_rtchat/partials/online_count.html", context=context)
+        html = render_to_string("a_rtchat/partials/online_count.html", context)
         self.send(text_data=html)
